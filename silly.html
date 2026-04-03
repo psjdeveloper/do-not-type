@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Do Not Type...</title>
+
+<style>
+body {
+    background-color: grey;
+    color: black;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    transition: background 0.2s;
+    overflow: hidden;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    font-size: 36px;
+    color: red;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+#prankText {
+    display: none;
+    font-size: 22px;
+    color: red;
+    margin-top: 20px;
+}
+
+/* Shake effect */
+@keyframes shake {
+  0% { transform: translate(0); }
+  25% { transform: translate(6px, -6px); }
+  50% { transform: translate(-6px, 6px); }
+  75% { transform: translate(6px, 6px); }
+  100% { transform: translate(0); }
+}
+
+.shake {
+    animation: shake 0.3s;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Do Not Type ...</h1>
+
+    <input type="text" id="type" placeholder="Do not Try to Type ..." />
+
+    <p id="prankText">Hehe... April Fool 😈</p>
+</div>
+
+<script>
+const input = document.getElementById('type');
+const prankText = document.getElementById('prankText');
+
+let triggered = false;
+let attempts = 0;
+
+// Global keydown listener ensures prank always works
+document.addEventListener('keydown', function(event) {
+    event.preventDefault(); // stop typing anywhere
+
+    attempts++;
+
+    if (!triggered) {
+        BoomBastic();
+        triggered = true;
+    } else {
+        updateText();
+    }
+});
+
+// Move input randomly on mouseover
+input.addEventListener('mouseover', () => {
+    input.style.position = 'absolute';
+    input.style.top = Math.random() * 80 + "%";
+    input.style.left = Math.random() * 80 + "%";
+});
+
+// Force focus on input so it can still receive typing
+setInterval(() => {
+    input.focus();
+}, 500);
+
+function BoomBastic() {
+    alert("I told you not to type ...");
+
+    // Show prank text
+    prankText.style.display = "block";
+    updateText();
+
+    // Play sound
+    const audio = new Audio("boom.mp3");
+    audio.play().catch(() => {});
+
+    // Flash red background
+    document.body.style.backgroundColor = "red";
+    setTimeout(() => {
+        document.body.style.backgroundColor = "grey";
+    }, 200);
+
+    // Shake screen
+    document.body.classList.add("shake");
+    setTimeout(() => {
+        document.body.classList.remove("shake");
+    }, 300);
+
+    // Nerd joke
+    console.log("Error 418: I'm a teapot ☕");
+}
+
+function updateText() {
+    prankText.innerText = `Hehe... April Fool 😈 (${attempts} attempts)`;
+}
+</script>
+
+</body>
+</html>
